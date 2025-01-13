@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'admin-style.css' %}">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <ul>
+            <!-- Add navigation items here -->
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <section id="dashboard">
+            <h1>Welcome to the Admin Dashboard</h1>
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Total Appointments</h3>
+                    <p>{{ total_appointments }}</p>
+                </div>
+                <div class="card">
+                    <h3>Registered Patients</h3>
+                    <p>{{ registered_patients }}</p>
+                </div>
+                <div class="card">
+                    <h3>Active Dentists</h3>
+                    <p>{{ active_dentists }}</p>
+                </div>
+                <div class="card">
+                    <h3>Messages</h3>
+                    <p>{{ messages }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="manage-appointments" class="section">
+            <h2>Manage Appointments</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Patient Name</th>
+                        <th>Dentist</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.id }}</td>
+                        <td>{{ appointment.user.first_name }} {{ appointment.user.last_name }}</td>
+                        <td>{{ appointment.dentist }}</td>
+                        <td>{{ appointment.date }} {{ appointment.time }}</td>
+                        <td>{{ appointment.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

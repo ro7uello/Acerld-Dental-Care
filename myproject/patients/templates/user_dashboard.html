@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'user_dashboard.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to the User Dashboard</h2>
+        <h3>Your Appointments</h3>
+        {% if appointments %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Dentist</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.dentist }}</td>
+                    <td>{{ appointment.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>You have no appointments.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
