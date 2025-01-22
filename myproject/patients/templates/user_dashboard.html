@@ -5,34 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'user_dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
 </head>
 <body>
-    <div class="container">
-        <h2>Welcome to the User Dashboard</h2>
-        <h3>Your Appointments</h3>
-        {% if appointments %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Dentist</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for appointment in appointments %}
-                <tr>
-                    <td>{{ appointment.date }}</td>
-                    <td>{{ appointment.dentist }}</td>
-                    <td>{{ appointment.description }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>You have no appointments.</p>
-        {% endif %}
+    <header class="header">
+        <nav class="navbar">
+            <button onclick="scrollToSection('home')">Home</button>
+            <button onclick="scrollToSection('profile')">Profile</button>
+            <button onclick="scrollToSection('appointments')">Appointments</button>
+            <button onclick="scrollToSection('contact-us')">Contact Us</button>
+        </nav>
+        <div class="icon">
+            <a href="{% url 'login' %}">Logout</a>
+        </div>
+    </header>
+
+    <div id="home" class="section">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Here you can manage your appointments and profile.</p>
     </div>
+
+    <div id="appointments" class="section">
+        <h2>Your Appointments</h2>
+        <a href="{% url 'book_appointment' %}">Book an Appointment</a>
+        <ul>
+            {% for appointment in appointments %}
+                <li>
+                    <strong>Date:</strong> {{ appointment.date }}<br>
+                    <strong>Time:</strong> {{ appointment.time }}<br>
+                    <strong>Dentist:</strong> {{ appointment.dentist }}<br>
+                    <strong>Status:</strong> {{ appointment.status }}
+                </li>
+            {% empty %}
+                <li>No appointments found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="profile" class="section">
+        <h2>Your Profile</h2>
+        <!-- Display user's profile information here -->
+    </div>
+
+    <div id="contact-us" class="section">
+        <h2>Contact Us</h2>
+        <!-- Contact information here -->
+    </div>
+
+    <script src="{% static 'script.js' %}"></script>
 </body>
 </html>
