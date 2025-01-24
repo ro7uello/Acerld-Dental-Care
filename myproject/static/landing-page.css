@@ -1,188 +1,417 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    font-family: "Alumni Sans Pinstripe", sans-serif;
+    box-sizing: border-box;
 }
 
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
+body {
+    background-color: #F3F3F3;
 }
 
-/* Header Styles */
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-}
-
-/* Slideshow container */
-.slideshow-container {
-    position: relative;
-    max-width: 100%;
-    margin: auto;
-}
-
-.mySlides {
-    display: none;
-}
-
-.fade {
-    animation-name: fade;
-    animation-duration: 1.5s;
-}
-
-@keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
-}
-
-/* Next & previous buttons */
-.prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-}
-
-.next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
-}
-
-.prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
-}
-
-/* The dots/bullets/indicators */
-.dot {
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
-}
-
-.active, .dot:hover {
-    background-color: #717171;
-}
-
-.text {
-    color: #f2f2f2;
-    font-size: 15px;
-    padding: 8px 12px;
-    position: absolute;
-    bottom: 8px;
+/* Header Section */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    text-align: center;
-}
-
-/* Services Section */
-#services {
-    margin-top: 40px;
-}
-
-.services {
+    padding: 10px;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background-color: #3C3C3C;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
     justify-content: space-between;
 }
 
-.service-box {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 30%;
-    height: 150px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Contact Us Section */
-.contact-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    margin-top: 20px;
-}
-
-.contact-container .section {
-    margin-bottom: 20px;
-}
-
-.contact-container h1 {
-    text-align: center;
-    color: #333;
-}
-
-.contact-container .contact-group {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-.contact-container .contacts a {
-    display: block;
-    margin: 10px 0;
-    color: #333;
+.navbar button {
+    font-family: 'Oswald', sans-serif;
+    font-size: 25px;
+    font-weight: 100;
+    color: #d9d9d9;
     text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
 }
 
-.contact-container .contacts a i {
-    margin-right: 10px;
+.navbar .tooth {
+    width: 3%;
 }
 
-.location {
-    margin-top: 20px;
+.icon a {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 100;
+    color: #d9d9d9;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
 }
 
-/* Appointment Section */
+.navbar button:hover {
+    color: #d9d9d9;
+    text-shadow: 0 0 10px #d9d9d9, 0 0 20px #d9d9d9, 0 0 30px #d9d9d9;
+}
+
+/* Slideshow Section */
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: 70px auto 0;
+    overflow: hidden;
+    height: 800px;
+    object-fit: cover;
+}
+
+.slides {
+    display: none;
+    width: 100%;
+}
+
+.slideshow-container img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.dots-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #717171;
+}
+
+/* Description Section */
+.description-container {
+    position: relative;
+    max-width: 100%;
+    margin-top: 70px;
+    text-align: center;
+    color: #131313;
+}
+
+.title {
+    padding: 30px;
+    font-size: 30px;
+}
+
+.description {
+    font-size: 35px;
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 70px;
+    line-height: 1.6;
+}
+
+/* Skilled Dentists Section */
+.dentist-header-container {
+    position: relative;
+    max-width: 100%;
+    margin-top: 50px;
+    text-align: center;
+    color: #131313;
+}
+
+.dentist-header {
+    font-size: 30px;
+    padding: 30px;
+}
+
+.dentist-description {
+    font-size: 35px;
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 70px;
+    line-height: 1.6;
+}
+
+.dentist-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 100%;
+    text-align: center;
+}
+
+.dentist img {
+    width: 50%;
+    border-radius: 8px;
+}
+
+.dentist-pos {
+    font-size: 23px;
+}
+
+/* Services Section */
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 50px;
+    margin-top: 70px;
+    background-color: #3C3C3C;
+}
+
+.container h1 {
+    text-align: center;
+    color: #F3F3F3;
+    font-size: 50px;
+}
+
+.services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10%;
+    padding: 70px;
+    border-radius: 10px;
+}
+
+.service-box {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: #F3F3F3;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Appointment button */
 .appointment {
     text-align: center;
-    margin-top: 20px;
+    padding-top: 40px;
+    margin: 20px 0;
 }
 
 .appointment a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 20px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
     color: #fff;
+    cursor: pointer;
+    font-size: 25px;
     text-decoration: none;
-    border-radius: 5px;
 }
 
-.appointment .blur {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 5px;
+.appointment button:hover {
+    background-color: #777;
+}
+
+/* Contact Us and Direction Section */
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px;
+    background-color: #F3F3F3;
+    box-sizing: border-box;
+}
+
+.section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+    gap: 20px;
+    min-width: 300px;
+    max-width: 500px;
 }
 
-.appointment .blur p {
-    margin: 0;
-    color: #333;
+.section h1 {
+    font-size: 45px;
+    margin-bottom: 20px;
 }
 
-.appointment .blur a {
-    color: #007bff;
+.contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.contacts a {
     text-decoration: none;
+    color: #717171;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease, text-shadow 0.3s ease; 
+}
+
+.contacts a:hover {
+    color: #000;
+    text-shadow: 0 0 10px #d9d9d9, 0 0 20px #d9d9d9, 0 0 30px #d9d9d9;
+}
+
+.map-box {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    background-color: #717171;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Accredited HMO's Section */
+.hmo-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 50px;
+    margin-top: 70px;
+    background-color: #3C3C3C;
+}
+
+.hmo-container h1 {
+    text-align: center;
+    color: #F3F3F3;
+    font-size: 50px;
+}
+
+.hmo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.hmo div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hmo img {
+    width: 50%;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .navbar button {
+        font-size: 18px;
+    }
+
+    .services {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5%;
+    }
+
+    .dentist-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dentist img {
+        width: 80%;
+    }
+
+    .description {
+        font-size: 25px;
+        width: 90%;
+    }
+
+    .container h1, .hmo-container h1 {
+        font-size: 40px;
+    }
+
+    .appointment button {
+        font-size: 20px;
+    }
+
+    .section h1 {
+        font-size: 35px;
+    }
+	.contact-container {
+        flex-direction: column; 
+        padding: 30px;
+    }
+
+    .section h1 {
+        font-size: 35px;
+    }
+
+    .contacts a {
+        font-size: 30px;
+    }
+
+    .map-box {
+        max-width: 100%; 
+        height: 250px;
+    }
+	.hmo {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar button {
+        font-size: 16px;
+    }
+
+    .container h1, .hmo-container h1 {
+        font-size: 35px;
+    }
+
+    .description {
+        font-size: 20px;
+    }
+
+    .services {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .dentist img {
+        width: 90%;
+    }
+
+    .appointment button {
+        font-size: 18px;
+    }
+	.section h1 {
+        font-size: 28px;
+    }
+
+    .contacts a {
+        font-size: 25px; 
+    }
+
+    .map-box {
+        height: 200px;
+    }
+    .hmo {
+        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+
+    .hmo-container h1 {
+        font-size: 35px;
+    }
 }
