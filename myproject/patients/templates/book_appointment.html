@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book an Appointment</title>
+    <title>Customer Appointment</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'appointment-style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -13,11 +13,46 @@
         <h1>Book an Appointment</h1>
     </header>
     <div class="container">
-        <form method="POST">
+        <form id="appointmentForm" method="post" action="{% url 'book_appointment' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Book Appointment</button>
+            <div class="form-group">
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Select Time:</label>
+                <input type="time" id="time" name="time" required>
+            </div>
+            <div class="form-group">
+                <label for="service">Service:</label>
+                <select id="service" name="service" required>
+                    <option value="">-- Select a Service --</option>
+                    <option value="Consultation">Consultation</option>
+                    <option value="Check-Up">Check-Up</option>
+                    <option value="Follow-Up">Follow-Up</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="doctor">Select Doctor:</label>
+                <select id="doctor" name="doctor" required>
+                    <option value="">-- Select a Doctor --</option>
+                    <option value="Dr. Smith">Dr. Smith</option>
+                    <option value="Dr. Johnson">Dr. Johnson</option>
+                    <option value="Dr. Williams">Dr. Williams</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="notes">Additional Notes:</label>
+                <textarea id="notes" name="notes" placeholder="Any specific details..."></textarea>
+            </div>
+            <div class="button-wrapper">
+                <a href="{% url 'user_dashboard' %}" class="btn">Back</a>
+                <button type="submit" class="btn">Submit</button>
+            </div>
         </form>
+        <div class="success-message" id="successMessage">
+            Appointment booked successfully!
+        </div>
     </div>
 </body>
 </html>

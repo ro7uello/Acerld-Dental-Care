@@ -7,7 +7,7 @@ body {
     height: 100vh;
     margin: 0;
 }
-.container {
+.login-container {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -15,17 +15,17 @@ body {
     width: 300px;
     text-align: center;
 }
-.container h2 {
+.login-container h2 {
     margin-bottom: 20px;
 }
-.container input {
+.form-group input {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-.container button {
+.login-container button {
     width: 100%;
     padding: 10px;
     background-color: #007BFF;
@@ -34,7 +34,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
-.container button:hover {
+.login-container button:hover {
     background-color: #0056b3;
 }
 .signup-link {

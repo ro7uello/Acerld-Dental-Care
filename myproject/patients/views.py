@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages 
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm, AppointmentForm
 from .models import Appointment, Patient, Profile, PromotionalOffer
@@ -28,7 +29,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('redirect_to_dashboard')
+                return redirect('user_dashboard')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -41,11 +42,6 @@ def redirect_to_dashboard(request):
         return redirect('admin_dashboard')
     else:
         return redirect('user_dashboard')
-
-@login_required
-def user_dashboard(request):
-    appointments = Appointment.objects.filter(user=request.user)
-    return render(request, 'user_dashboard.html', {'appointments': appointments})
 
 @login_required
 def admin_dashboard(request):
@@ -77,7 +73,13 @@ def book_appointment(request):
             appointment = form.save(commit=False)
             appointment.user = request.user
             appointment.save()
+            messages.success(request, 'Appointment booked successfully!')
             return redirect('user_dashboard')
     else:
         form = AppointmentForm()
     return render(request, 'book_appointment.html', {'form': form})
+
+@login_required
+def user_dashboard(request):
+    appointments = Appointment.objects.filter(user=request.user)
+    return render(request, 'user_dashboard.html', {'appointments': appointments})

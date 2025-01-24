@@ -25,13 +25,13 @@ class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField(default=datetime.time(9, 0))  # Default time set to 9:00 AM
-    dentist = models.CharField(max_length=100)
+    doctor = models.CharField(max_length=100)
     service = models.CharField(max_length=100)
     notes = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
 
     def __str__(self):
-        return f"Appointment with {self.dentist} on {self.date} at {self.time}"
+        return f"Appointment with {self.doctor} on {self.date} at {self.time}"
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

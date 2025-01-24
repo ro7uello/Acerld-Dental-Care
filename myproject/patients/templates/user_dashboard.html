@@ -30,12 +30,7 @@
         <a href="{% url 'book_appointment' %}">Book an Appointment</a>
         <ul>
             {% for appointment in appointments %}
-                <li>
-                    <strong>Date:</strong> {{ appointment.date }}<br>
-                    <strong>Time:</strong> {{ appointment.time }}<br>
-                    <strong>Dentist:</strong> {{ appointment.dentist }}<br>
-                    <strong>Status:</strong> {{ appointment.status }}
-                </li>
+            <li>{{ appointment.date }} - {{ appointment.time }} - {{ appointment.doctor }} - {{ appointment.service }} - {{ appointment.status }}</li>
             {% empty %}
                 <li>No appointments found.</li>
             {% endfor %}

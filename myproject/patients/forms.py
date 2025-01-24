@@ -22,15 +22,15 @@ class UserRegistrationForm(UserCreationForm):
             raise forms.ValidationError("Passwords do not match")
         
 class AppointmentForm(forms.ModelForm):
-    DENTIST_CHOICES = [
+    DOCTOR_CHOICES = [
         ('Dr. Smith', 'Dr. Smith'),
         ('Dr. Johnson', 'Dr. Johnson'),
         ('Dr. Williams', 'Dr. Williams'),
     ]
-    dentist = forms.ChoiceField(choices=DENTIST_CHOICES)
+    dentist = forms.ChoiceField(choices=DOCTOR_CHOICES)
     class Meta:
         model = Appointment
-        fields = ['date', 'time', 'service', 'notes']
+        fields = ['date', 'time', 'doctor', 'service', 'notes']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
