@@ -21,7 +21,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('patients.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),  # For login, logout, password management
+    path('', include('patients.urls')),  # Include the patients app URLs
 ]
 
 if settings.DEBUG:

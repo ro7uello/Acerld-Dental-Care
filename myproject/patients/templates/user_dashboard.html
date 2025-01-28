@@ -32,7 +32,7 @@
             {% for appointment in appointments %}
             <li>{{ appointment.date }} - {{ appointment.time }} - {{ appointment.doctor }} - {{ appointment.service }} - {{ appointment.status }}</li>
             {% empty %}
-                <li>No appointments found.</li>
+            <li>No appointments found.</li>
             {% endfor %}
         </ul>
     </div>
@@ -46,6 +46,15 @@
         <h2>Contact Us</h2>
         <!-- Contact information here -->
     </div>
+
+    <!-- Display messages -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
     <script src="{% static 'script.js' %}"></script>
 </body>

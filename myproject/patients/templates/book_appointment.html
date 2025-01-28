@@ -3,56 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Appointment</title>
+    <title>Book Appointment</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'appointment-style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header>
         <h1>Book an Appointment</h1>
     </header>
     <div class="container">
-        <form id="appointmentForm" method="post" action="{% url 'book_appointment' %}">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" id="appointmentForm">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+            
             <div class="form-group">
                 <label for="date">Select Date:</label>
-                <input type="date" id="date" name="date" required>
+                {{ form.date }}
+                {% if form.date.errors %}
+                <div class="field-error">{{ form.date.errors }}</div>
+                {% endif %}
             </div>
-            <div class="form-group">
-                <label for="time">Select Time:</label>
-                <input type="time" id="time" name="time" required>
-            </div>
-            <div class="form-group">
-                <label for="service">Service:</label>
-                <select id="service" name="service" required>
-                    <option value="">-- Select a Service --</option>
-                    <option value="Consultation">Consultation</option>
-                    <option value="Check-Up">Check-Up</option>
-                    <option value="Follow-Up">Follow-Up</option>
-                </select>
-            </div>
+
             <div class="form-group">
                 <label for="doctor">Select Doctor:</label>
-                <select id="doctor" name="doctor" required>
-                    <option value="">-- Select a Doctor --</option>
-                    <option value="Dr. Smith">Dr. Smith</option>
-                    <option value="Dr. Johnson">Dr. Johnson</option>
-                    <option value="Dr. Williams">Dr. Williams</option>
-                </select>
+                {{ form.doctor }}
+                {% if form.doctor.errors %}
+                <div class="field-error">{{ form.doctor.errors }}</div>
+                {% endif %}
             </div>
+
+            <div class="form-group">
+                <label for="time_slot">Select Time:</label>
+                {{ form.time_slot }}
+                {% if form.time_slot.errors %}
+                <div class="field-error">{{ form.time_slot.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="service">Select Service:</label>
+                {{ form.service }}
+                {% if form.service.errors %}
+                <div class="field-error">{{ form.service.errors }}</div>
+                {% endif %}
+            </div>
+
             <div class="form-group">
                 <label for="notes">Additional Notes:</label>
-                <textarea id="notes" name="notes" placeholder="Any specific details..."></textarea>
+                {{ form.notes }}
+                {% if form.notes.errors %}
+                <div class="field-error">{{ form.notes.errors }}</div>
+                {% endif %}
             </div>
+            
             <div class="button-wrapper">
                 <a href="{% url 'user_dashboard' %}" class="btn">Back</a>
                 <button type="submit" class="btn">Submit</button>
             </div>
         </form>
-        <div class="success-message" id="successMessage">
-            Appointment booked successfully!
-        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateField = document.querySelector('[name="date"]');
+            const doctorField = document.querySelector('[name="doctor"]');
+            const timeSlotField = document.querySelector('[name="time_slot"]');
+
+            function updateTimeSlots() {
+                const date = dateField.value;
+                const doctor = doctorField.value;
+
+                if (date && doctor) {
+                    fetch(`/get_available_time_slots/?date=${date}&doctor=${doctor}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear existing options
+                            timeSlotField.innerHTML = '<option value="">Select a time slot</option>';
+                            
+                            // Add new options
+                            data.time_slots.forEach(([value, label]) => {
+                                const option = document.createElement('option');
+                                option.value = value;
+                                option.textContent = label;
+                                timeSlotField.appendChild(option);
+                            });
+                        });
+                }
+            }
+
+            dateField.addEventListener('change', updateTimeSlots);
+            doctorField.addEventListener('change', updateTimeSlots);
+        });
+    </script>
 </body>
 </html>

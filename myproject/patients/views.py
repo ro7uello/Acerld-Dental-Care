@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages 
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import JsonResponse
+from datetime import datetime
 from .forms import UserRegistrationForm, AppointmentForm
 from .models import Appointment, Patient, Profile, PromotionalOffer
 
@@ -68,18 +70,39 @@ def landing_page(request):
 @login_required
 def book_appointment(request):
     if request.method == 'POST':
-        form = AppointmentForm(request.POST)
+        form = AppointmentForm(data=request.POST)
         if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.user = request.user
-            appointment.save()
-            messages.success(request, 'Appointment booked successfully!')
-            return redirect('user_dashboard')
+            try:
+                appointment = form.save(commit=False)
+                appointment.user = request.user
+                # Convert time_slot string to time object
+                hour, minute = map(int, form.cleaned_data['time_slot'].split(':'))
+                appointment.time = datetime.strptime(f"{hour}:{minute}", "%H:%M").time()
+                appointment.save()
+                messages.success(request, 'Appointment booked successfully!')
+                return redirect('user_dashboard')
+            except Exception as e:
+                messages.error(request, f'Error saving appointment: {str(e)}')
     else:
         form = AppointmentForm()
+    
     return render(request, 'book_appointment.html', {'form': form})
 
 @login_required
 def user_dashboard(request):
-    appointments = Appointment.objects.filter(user=request.user)
+    # Get all appointments for the current user
+    appointments = Appointment.objects.filter(user=request.user).order_by('date', 'time')
     return render(request, 'user_dashboard.html', {'appointments': appointments})
+
+@login_required
+def get_available_time_slots(request):
+    if request.method == 'GET':
+        date = request.GET.get('date')
+        doctor = request.GET.get('doctor')
+        
+        if date and doctor:
+            form = AppointmentForm()
+            time_slots = form.get_available_time_slots(date, doctor)
+            return JsonResponse({'time_slots': time_slots})
+    
+    return JsonResponse({'time_slots': []})

@@ -14,14 +14,12 @@ class Patient(models.Model):
     def __str__(self):
         return self.user.username
 
+STATUS_CHOICES = [
+    ('Pending', 'Pending'),
+    ('Confirmed', 'Confirmed'),
+    ('Cancelled', 'Cancelled'),
+]
 class Appointment(models.Model):
-    STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Confirmed', 'Confirmed'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
-    ]
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField(default=datetime.time(9, 0))  # Default time set to 9:00 AM
