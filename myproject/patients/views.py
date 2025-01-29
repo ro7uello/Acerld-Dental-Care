@@ -3,10 +3,11 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages 
 from django.contrib.auth.forms import AuthenticationForm
+from django.utils import timezone
 from django.http import JsonResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 from .forms import UserRegistrationForm, AppointmentForm
-from .models import Appointment, Patient, Profile, PromotionalOffer
+from .models import Appointment, Patient, Profile, PromotionalOffer, Profit
 
 def register(request):
     if request.method == 'POST':
@@ -62,6 +63,39 @@ def admin_dashboard(request):
         'appointments': appointments,
     }
     return render(request, 'admin_dashboard.html', context)
+
+def log_profit(request):
+    if request.method == 'POST':
+        amount = request.POST['amount']
+        Profit.objects.create(amount=amount)
+        return redirect('admin_dashboard')
+
+def get_profit_data(request):
+    today = timezone.now().date()
+    start_of_week = today - timedelta(days=today.weekday())
+    start_of_year = today.replace(month=1, day=1)
+    
+    weekly_profits = Profit.objects.filter(date_logged__gte=start_of_week)
+    quarterly_profits = Profit.objects.filter(date_logged__year=today.year)
+    yearly_profits = Profit.objects.filter(date_logged__year=today.year)
+
+    weekly_data = [0] * 7
+    for profit in weekly_profits:
+        weekly_data[profit.date_logged.weekday()] += profit.amount
+
+    quarterly_data = [0] * 4
+    for profit in quarterly_profits:
+        quarter = (profit.date_logged.month - 1) // 3
+        quarterly_data[quarter] += profit.amount
+
+    yearly_data = sum(profit.amount for profit in yearly_profits)
+
+    data = {
+        'weekly': weekly_data,
+        'quarterly': quarterly_data,
+        'yearly': yearly_data,
+    }
+    return JsonResponse(data)
 
 def landing_page(request):
     promotional_offers = PromotionalOffer.objects.all()

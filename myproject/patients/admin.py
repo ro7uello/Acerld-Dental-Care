@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Patient, Appointment, Profile, PromotionalOffer
+from .models import Patient, Appointment, Profile, PromotionalOffer, Profit
 
 
 class ProfileInline(admin.StackedInline):
@@ -28,4 +28,5 @@ admin.site.register(User, CustomUserAdmin)
 admin.site.register(Patient)
 admin.site.register(Appointment)
 admin.site.register(Profile)
-admin.site.register(PromotionalOffer) 
+admin.site.register(PromotionalOffer)
+admin.site.register(Profit)

@@ -64,6 +64,102 @@
                 </tbody>
             </table>
         </section>
+
+        <section id="log-profit" class="section">
+            <h2>Log Profit</h2>
+            <form method="post" action="{% url 'log_profit' %}">
+                {% csrf_token %}
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+                <button type="submit">Log Profit</button>
+            </form>
+        </section>
+        
+        <section id="charts" class="section">
+            <h2>Profit Charts</h2>
+            <div class="tabs">
+                <button class="tablink" onclick="openTab(event, 'Weekly')">Weekly</button>
+                <button class="tablink" onclick="openTab(event, 'Quarterly')">Quarterly</button>
+                <button class="tablink" onclick="openTab(event, 'Yearly')">Yearly</button>
+            </div>
+        
+            <div id="Weekly" class="tabcontent">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+            <div id="Quarterly" class="tabcontent">
+                <canvas id="quarterlyChart"></canvas>
+            </div>
+            <div id="Yearly" class="tabcontent">
+                <canvas id="yearlyChart"></canvas>
+            </div>
+        </section>
+
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Fetch data and render charts
+    fetch('/api/profit-data/')
+        .then(response => response.json())
+        .then(data => {
+            const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+            const quarterlyCtx = document.getElementById('quarterlyChart').getContext('2d');
+            const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+
+            new Chart(weeklyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    datasets: [{
+                        label: 'Weekly Profit',
+                        data: data.weekly,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            new Chart(quarterlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: 'Quarterly Profit',
+                        data: data.quarterly,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            new Chart(yearlyCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Yearly'],
+                    datasets: [{
+                        label: 'Yearly Profit',
+                        data: [data.yearly],
+                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        });
+</script>
 </body>
 </html>

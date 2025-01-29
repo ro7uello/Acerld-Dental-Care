@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 import datetime
 
 class Patient(models.Model):
@@ -46,3 +47,7 @@ class PromotionalOffer(models.Model):
 
     def __str__(self):
         return self.title if self.title else "Promotional Offer"
+
+class Profit(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date_logged = models.DateTimeField(default=timezone.now)
