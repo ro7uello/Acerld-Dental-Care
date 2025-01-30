@@ -2,39 +2,41 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages 
-from django.contrib.auth.forms import AuthenticationForm
 from django.utils import timezone
 from django.http import JsonResponse
 from datetime import datetime, timedelta
-from .forms import UserRegistrationForm, AppointmentForm
-from .models import Appointment, Patient, Profile, PromotionalOffer, Profit
+from .forms import UserRegistrationForm, AppointmentForm, UserLoginForm
+from .models import Appointment, Patient, PromotionalOffer, Profit
 
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.refresh_from_db()  # Load the profile instance created by the signal
-            user.profile.phone_number = form.cleaned_data.get('phone_number')
-            user.profile.city_address = form.cleaned_data.get('city_address')
-            user.save()
+            messages.success(request, 'Account created successfully! Please log in.')
             return redirect('login')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
 
 def user_login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = UserLoginForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('user_dashboard')
+                return redirect('redirect_to_dashboard')
+            else:
+                messages.error(request, 'Invalid username or password. Please try again.')
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
     else:
-        form = AuthenticationForm()
+        form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
 
 @login_required

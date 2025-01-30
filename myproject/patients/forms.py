@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Appointment
 from datetime import datetime, time, timedelta
-
+from django.core.exceptions import ValidationError
+import re
 class UserRegistrationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, help_text='Required')
     last_name = forms.CharField(max_length=30, required=True, help_text='Required')
@@ -13,14 +14,34 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'phone_number', 'city_address', 'email', 'password1', 'password2']
-        
+
+    def clean_password1(self):
+        password = self.cleaned_data.get('password1')
+        if len(password) < 8:
+            raise ValidationError('Password must be at least 8 characters long.')
+        if not re.search(r'[A-Z]', password):
+            raise ValidationError('Password must contain at least one uppercase letter.')
+        if not re.search(r'[a-z]', password):
+            raise ValidationError('Password must contain at least one lowercase letter.')
+        if not re.search(r'[0-9]', password):
+            raise ValidationError('Password must contain at least one digit.')
+        if not re.search(r'[\W_]', password):
+            raise ValidationError('Password must contain at least one special character.')
+        if 'password' in password.lower():
+            raise ValidationError('Password is too common.')
+        return password
+    
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
         if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match")
+            raise forms.ValidationError("Passwords do not match") 
+        
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(max_length=254, required=True)
+    password = forms.CharField(widget=forms.PasswordInput, required=True)
         
 class AppointmentForm(forms.ModelForm):
     DOCTOR_CHOICES = [
