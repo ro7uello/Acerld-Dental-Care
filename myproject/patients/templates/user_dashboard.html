@@ -5,29 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'userdb.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Gruppo&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header class="header">
         <nav class="navbar">
-            <button onclick="scrollToSection('home')">Home</button>
-            <button onclick="scrollToSection('profile')">Profile</button>
-            <button onclick="scrollToSection('appointments')">Appointments</button>
-            <button onclick="scrollToSection('contact-us')">Contact Us</button>
+            <a href="LandingPage.html" class="logo-link">
+                <img class="tooth" src="{% static 'pictures/toothicon.png' %}" alt="Dental Clinic Logo">
+            </a>
+            <div class="nav-items">
+                <a href="#home-section" class="nav-link">Home</a>
+                <a href="#appointment-section" class="nav-link">Appointment</a>
+                <a href="#profile-section" class="nav-link">Profile</a>
+                <a href="#contact-section" class="nav-link">Contact Us</a>
+            </div>
+            <a href="#" class="login">Profile Name</a>
         </nav>
-        <div class="icon">
-            <a href="{% url 'login' %}">Logout</a>
-        </div>
     </header>
-
-    <div id="home" class="section">
+    <section id="home-section">
+        <div id="home" class="section-content"> 
         <h1>Welcome to Your Dashboard</h1>
         <p>Here you can manage your appointments and profile.</p>
     </div>
+    </section>
 
-    <div id="appointments" class="section">
+
+    <section id="appointment-section">
+        <div id="appointments" class="section-content">
         <h2>Your Appointments</h2>
-        <a href="{% url 'book_appointment' %}">Book an Appointment</a>
+        <a href="{% url 'book_appointment' %}" class="book-appointment-btn">Book an Appointment</a>
         <ul>
             {% for appointment in appointments %}
             <li>{{ appointment.date }} - {{ appointment.time }} - {{ appointment.doctor }} - {{ appointment.service }} - {{ appointment.status }}</li>
@@ -36,26 +46,61 @@
             {% endfor %}
         </ul>
     </div>
+    </section>
 
-    <div id="profile" class="section">
+    <section id="profile-section">
+        <div id="profile" class="section-content">
         <h2>Your Profile</h2>
-        <!-- Display user's profile information here -->
+        <div class="profile-container">
+            <div class="profile-picture">
+                <img id="profile-img" src="{% static 'default-profile.png' %}" alt="Profile Picture">
+                <input type="file" id="profile-pic-input" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                <button id="change-pic-btn" onclick="document.getElementById('profile-pic-input').click();" style="display: none;">Change Profile Picture</button>
+            </div>
+            <div class="profile-info">
+                <label><strong>First Name:</strong></label>
+                <input type="text" id="first-name" value="{{ user.first_name }}" disabled>
+    
+                <label><strong>Last Name:</strong></label>
+                <input type="text" id="last-name" value="{{ user.last_name }}" disabled>
+    
+                <label><strong>Contact Number:</strong></label>
+                <input type="text" id="contact-number" value="{{ user.contact_number }}" disabled>
+    
+                <label><strong>Email:</strong></label>
+                <input type="email" id="email" value="{{ user.email }}" disabled>
+            </div>
+            <div class="profile-buttons">
+                <button id="edit-btn" onclick="enableEditing()">Change</button>
+                <button id="save-btn" onclick="saveChanges()" style="display: none;">Save Changes</button>
+                <button id="cancel-btn" onclick="cancelChanges()" style="display: none;">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <section id="contact-section">
+    <div id="reviews" class="section-content">
+        <form id="review-form">
+            <h2>Leave a Review</h2>
+            <label for="review-text">Your Review:</label>
+            <textarea id="review-text" name="review_text" rows="4" required></textarea>
+            <button type="submit">Submit Review</button>
+        </form>
     </div>
 
-    <div id="contact-us" class="section">
+    <div id="contact-us" class="section-content">
         <h2>Contact Us</h2>
-        <!-- Contact information here -->
+        <div class="contact-info">
+            <a href="https://www.facebook.com/profile.php?id=100006450180688"><i class="fa-brands fa-facebook-f"></i> Acerld Dental Care</a>
+            <a href="tel:+639778228627"><i class="fa-solid fa-phone"></i> +63 977 822 8627</a>
+            <a href="mailto:acerlddentalcare@gmail.com"><i class="fa-solid fa-envelope"></i> acerlddentalcare@gmail.com</a>
+        </div>
     </div>
+    </section>
 
-    <!-- Display messages -->
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-        <div class="alert {{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
 
-    <script src="{% static 'script.js' %}"></script>
+
+    <script src="{% static 'userdb.js' %}"></script>
 </body>
 </html>

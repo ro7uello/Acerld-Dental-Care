@@ -12,7 +12,6 @@
     <div class="sidebar">
         <h2>Admin Dashboard</h2>
         <ul>
-            <!-- Add navigation items here -->
         </ul>
     </div>
 
@@ -22,144 +21,120 @@
             <div class="dashboard-cards">
                 <div class="card">
                     <h3>Total Appointments</h3>
-                    <p>{{ total_appointments }}</p>
+                    <p>120</p>
                 </div>
                 <div class="card">
                     <h3>Registered Patients</h3>
-                    <p>{{ registered_patients }}</p>
+                    <p>300</p>
                 </div>
                 <div class="card">
                     <h3>Active Dentists</h3>
-                    <p>{{ active_dentists }}</p>
+                    <p>15</p>
                 </div>
                 <div class="card">
                     <h3>Messages</h3>
-                    <p>{{ messages }}</p>
+                    <p>45</p>
                 </div>
             </div>
         </section>
 
-        <section id="manage-appointments" class="section">
+        <section id="appointments" class="section">
             <h2>Manage Appointments</h2>
             <table>
                 <thead>
                     <tr>
                         <th>Appointment ID</th>
                         <th>Patient Name</th>
-                        <th>Doctor</th>
                         <th>Date & Time</th>
+                        <th>Service</th>
+                        <th>Type of Service</th>
+                        <th>Material</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for appointment in appointments %}
                     <tr>
-                        <td>{{ appointment.id }}</td>
-                        <td>{{ appointment.user.first_name }} {{ appointment.user.last_name }}</td>
-                        <td>{{ appointment.doctor }}</td>
-                        <td>{{ appointment.date }} {{ appointment.time }}</td>
-                        <td>{{ appointment.status }}</td>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>2025-01-10 10:00 AM</td>
+                        <td>Removable Partial Denture</td>
+                        <td>Bilateral</td>
+                        <td>Acrylic</td>
+                        <td>Confirmed</td>
+                        <td><button class="action-btn">Edit</button> <button class="action-btn">Delete</button></td>
                     </tr>
-                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="slideshow-management" class="section">
+            <h2>Manage Slideshow</h2>
+            <form id="addSlideForm">
+                <label for="slideImage">Upload Image:</label>
+                <input type="file" id="slideImage" name="slideImage" accept="image/*" required>
+                
+                <button type="submit">Add Slide</button>
+            </form>
+        
+            <h3>Existing Slides</h3>
+            <table id="slidesTable">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Link</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Slides will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </section>
+        <section id="data-management" class="section">
+            <h2>Manage Data</h2>
+        
+            <!-- Add Profit Form -->
+            <form id="addProfitForm">
+                <label for="profitDate">Date:</label>
+                <input type="date" id="profitDate" name="profitDate" required>
+        
+                <label for="profitAmount">Profit Amount:</label>
+                <input type="number" id="profitAmount" name="profitAmount" step="0.01" required>
+        
+                <button type="submit">Add Profit</button>
+            </form>
+        
+            <!-- Summary Section -->
+            <div class="summary">
+                <h3>Summary</h3>
+                <p><strong>Daily Profit:</strong> ₱<span id="dailyProfit">0.00</span></p>
+                <p><strong>Monthly Profit:</strong> ₱<span id="monthlyProfit">0.00</span></p>
+                <p><strong>Yearly Profit:</strong> ₱<span id="yearlyProfit">0.00</span></p>
+            </div>
+        
+            <!-- Profit Records Table -->
+            <h3>Profit Records</h3>
+            <table id="profitsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Profit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Profit records will be dynamically loaded here -->
                 </tbody>
             </table>
         </section>
 
-        <section id="log-profit" class="section">
-            <h2>Log Profit</h2>
-            <form method="post" action="{% url 'log_profit' %}">
-                {% csrf_token %}
-                <label for="amount">Amount:</label>
-                <input type="number" id="amount" name="amount" required>
-                <button type="submit">Log Profit</button>
-            </form>
+        <section id="settings" class="section">
+            <h2>Settings</h2>
+            <p>Feature coming soon...</p>
         </section>
-        
-        <section id="charts" class="section">
-            <h2>Profit Charts</h2>
-            <div class="tabs">
-                <button class="tablink" onclick="openTab(event, 'Weekly')">Weekly</button>
-                <button class="tablink" onclick="openTab(event, 'Quarterly')">Quarterly</button>
-                <button class="tablink" onclick="openTab(event, 'Yearly')">Yearly</button>
-            </div>
-        
-            <div id="Weekly" class="tabcontent">
-                <canvas id="weeklyChart"></canvas>
-            </div>
-            <div id="Quarterly" class="tabcontent">
-                <canvas id="quarterlyChart"></canvas>
-            </div>
-            <div id="Yearly" class="tabcontent">
-                <canvas id="yearlyChart"></canvas>
-            </div>
-        </section>
-
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablink");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    // Fetch data and render charts
-    fetch('/api/profit-data/')
-        .then(response => response.json())
-        .then(data => {
-            const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
-            const quarterlyCtx = document.getElementById('quarterlyChart').getContext('2d');
-            const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
-
-            new Chart(weeklyCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                    datasets: [{
-                        label: 'Weekly Profit',
-                        data: data.weekly,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                }
-            });
-
-            new Chart(quarterlyCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                    datasets: [{
-                        label: 'Quarterly Profit',
-                        data: data.quarterly,
-                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                        borderColor: 'rgba(153, 102, 255, 1)',
-                        borderWidth: 1
-                    }]
-                }
-            });
-
-            new Chart(yearlyCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Yearly'],
-                    datasets: [{
-                        label: 'Yearly Profit',
-                        data: [data.yearly],
-                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                        borderColor: 'rgba(255, 159, 64, 1)',
-                        borderWidth: 1
-                    }]
-                }
-            });
-        });
-</script>
 </body>
 </html>

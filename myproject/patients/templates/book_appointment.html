@@ -3,111 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment</title>
+    <title>Customer Appointment</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'appointment-style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header>
         <h1>Book an Appointment</h1>
     </header>
     <div class="container">
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <form method="post" id="appointmentForm">
-            {% csrf_token %}
-            {% if form.non_field_errors %}
-            <div class="alert alert-error">
-                {{ form.non_field_errors }}
-            </div>
-            {% endif %}
-            
+        <form id="appointmentForm">
             <div class="form-group">
                 <label for="date">Select Date:</label>
-                {{ form.date }}
-                {% if form.date.errors %}
-                <div class="field-error">{{ form.date.errors }}</div>
-                {% endif %}
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="time">Select Time:</label>
+                <input type="time" id="time" name="time" required>
+            </div>
+            <div class="form-group">
+                <label for="service">Service:</label>
+                <select id="service" name="service" onchange="updateOptions()" required>
+                    <option value="">Select a Service</option>
+                    <option value="surgery">Surgery</option> 
+                    <option value="fixed">Fixed Partial Denture</option>
+                    <option value="crown">Crown</option>
+                    <option value="removable">Removable Partial Denture</option>
+                    <option value="complete">Complete Denture</option>
+                    <option value="other">Others</option>
+                </select>
             </div>
 
-            <div class="form-group">
-                <label for="doctor">Select Doctor:</label>
-                {{ form.doctor }}
-                {% if form.doctor.errors %}
-                <div class="field-error">{{ form.doctor.errors }}</div>
-                {% endif %}
+            <!-- Dynamic Options for Other Services -->
+            <div class="form-group" id="otherOptions" style="display: none;">
+                <label for="otherType">Select Type:</label>
+                <select id="otherType" name="otherType" onchange="updateMaterialOptions()"></select>
             </div>
 
-            <div class="form-group">
-                <label for="time_slot">Select Time:</label>
-                {{ form.time_slot }}
-                {% if form.time_slot.errors %}
-                <div class="field-error">{{ form.time_slot.errors }}</div>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <label for="service">Select Service:</label>
-                {{ form.service }}
-                {% if form.service.errors %}
-                <div class="field-error">{{ form.service.errors }}</div>
-                {% endif %}
+            <!-- Material Selection -->
+            <div class="form-group" id="materialOptions" style="display: none;">
+                <label for="materialType">Material:</label>
+                <select id="materialType" name="materialType"></select>
             </div>
 
             <div class="form-group">
                 <label for="notes">Additional Notes:</label>
-                {{ form.notes }}
-                {% if form.notes.errors %}
-                <div class="field-error">{{ form.notes.errors }}</div>
-                {% endif %}
+                <textarea id="notes" name="notes" placeholder="Any specific details..."></textarea>
             </div>
-            
+
             <div class="button-wrapper">
-                <a href="{% url 'user_dashboard' %}" class="btn">Back</a>
+                <a href="{% url 'landing_page' %}" class="btn">Back</a>
                 <button type="submit" class="btn">Submit</button>
             </div>
         </form>
+        <div class="success-message" id="successMessage">
+            Appointment booked successfully!
+        </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateField = document.querySelector('[name="date"]');
-            const doctorField = document.querySelector('[name="doctor"]');
-            const timeSlotField = document.querySelector('[name="time_slot"]');
-
-            function updateTimeSlots() {
-                const date = dateField.value;
-                const doctor = doctorField.value;
-
-                if (date && doctor) {
-                    fetch(`/get_available_time_slots/?date=${date}&doctor=${doctor}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            // Clear existing options
-                            timeSlotField.innerHTML = '<option value="">Select a time slot</option>';
-                            
-                            // Add new options
-                            data.time_slots.forEach(([value, label]) => {
-                                const option = document.createElement('option');
-                                option.value = value;
-                                option.textContent = label;
-                                timeSlotField.appendChild(option);
-                            });
-                        });
-                }
-            }
-
-            dateField.addEventListener('change', updateTimeSlots);
-            doctorField.addEventListener('change', updateTimeSlots);
-        });
-    </script>
+    <script src="{% static 'appointments.js' %}"></script>
 </body>
 </html>

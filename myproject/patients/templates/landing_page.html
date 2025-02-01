@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>Acerld Dental Care</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% load static %}
@@ -16,27 +16,30 @@
     <body>
         <header class="header">
             <nav class="navbar">
-                <img class="tooth" src="{% static 'toothicon.png' %}">
-                <button>Home</button>
-                <button>Our Team</button>
-                <button>Services</button>
-                <button>Contact Us</button>
+                <a href="{% url 'landing_page' %}" class="logo-link">
+                    <img class="tooth" src="{% static 'toothicon.png' %}" alt="Dental Clinic Logo">
+                </a>
+                <div class="nav-items">
+                    <a href="#home-section" class="nav-link">Home</a>
+                    <a href="#team-section" class="nav-link">Our Team</a>
+                    <a href="#services-section" class="nav-link">Services</a>
+                    <a href="#contact-section" class="nav-link">Contact Us</a>
+                </div>
+                <a href="{% url 'login' %}" class="login">Login</a>
             </nav>
-            <div class="icon">
-                <a href="{% url 'login' %}">Login</a>
-            </div>
         </header>
 
         <!--Slideshow Section-->
+        <section id="home-section">
         <div id="home" class="slideshow-container">
             <div class="slides">
-                <img src="{% static 'slide1.jpeg' %}" alt="slide1">
+                <img src="{% static 'Acerld Dental Care.png' %}" alt="slide1">
             </div>
             <div class="slides">
                 <img src="{% static 'slide2.jpg' %}" alt="slide2">
             </div>
             <div class="slides">
-                <img src="{% static 'slide1.jpeg' %}" alt="slide3">
+                <img src="{% static 'slide1.jpg' %}" alt="slide3">
             </div>
         </div>
         <div class="dots-container">
@@ -44,6 +47,7 @@
             <span class="dot" onclick="currentSlide(2)"></span>
             <span class="dot" onclick="currentSlide(3)"></span>
         </div>
+        </section>
 
         <!--Description Section-->
         <div class="description-container">
@@ -52,13 +56,14 @@
             </div>
             <div class="description">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus posuere bibendum urna nec sagittis. Donec eu sodales erat, pharetra aliquam erat. Pellentesque venenatis laoreet neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum nec varius ex. Phasellus dapibus dui.
+                    <b>Acerld Dental Care</b> is a modern dental practice dedicated to providing comprehensive, patient-centered care. Our experienced team, led by <b>Dr. Peter Lou Santiago-Caronan</b>, offers a full spectrum of dental services, from preventative care to advanced restorative and cosmetic treatments. We prioritize patient comfort and utilize the latest technology to ensure you receive the highest standard of care in a relaxed and welcoming environment.
                 </p>
             </div>
         </div>
         <hr>
 
         <!--Skilled Dentists Section-->
+        <section id="team-section">
         <div id="our-team" class="dentist-header-container">
             <div class="dentist-header">
                 <h1>Meet Our Skilled Dentists</h1>
@@ -70,53 +75,109 @@
             </div>
         </div>
         <div class="dentist-container">
-            <div class="dentist">
-                <img src="{% static 'slide1.jpeg' %}" alt="dentist1">
+            <div class="dentist" data-dentist="dr_peter">
+                <img src="{% static 'Sample.jpg' %}" alt="dentist1">
                 <div class="dentist-name">
-                    <h1>Dr. Peter Yesser</h1>
+                    <h1>Dr. Peter Lou Santiago-Caronan</h1>
                 </div>
                 <div class="dentist-pos">
-                    <p>Pediatric Dentistry</p>
+                    <p>Head Dentist</p> 
                 </div>
             </div>
-            <div class="dentist">
-                <img src="Sample.jpg" alt="dentist2">
+            <div class="dentist" data-dentist="dr_brian">
+                <img src="{% static 'Sample.jpg' %}" alt="dentist2">
                 <div class="dentist-name">
-                    <h1>Dr. Peter Yesser</h1>
+                    <h1>Dr. Brian S. Bongolan</h1>
                 </div>
                 <div class="dentist-pos">
                     <p>Pediatric Dentistry</p></div>
             </div>
-            <div class="dentist">
-                <img src="Sample.jpg" alt="dentist3">
+            <div class="dentist" data-dentist="dr_chloie">
+                <img src="{% static 'Sample.jpg' %}" alt="dentist3">
                 <div class="dentist-name">
-                    <h1>Dr. Peter Yesser</h1>
+                    <h1>Dr. Chloie Jeremy R. Tuason</h1>
                 </div>
                 <div class="dentist-pos">
-                    <p>Pediatric Dentistry</p>
+                    <p>General Dentist</p>
                 </div>
             </div>
         </div>
+        </section>
+
+        <div id="dentist-popup" class="dentist-popup">
+            <span class="close-button" onclick="closeDentistPopup()">×</span>
+            <div class="dentist-popup-content">
+                <img id="dentist-popup-image" src="" alt="Dentist Image">
+                <div class="dentist-description" id="dentist-popup-text">
+                    </div>
+            </div>
+        </div>
+    
 
         <!---Services Section--->
-
+        <section id="services-section">
         <div id="services" class="container">
             <h1>Services We Offer</h1>
             <main class="services">
-                <div class="service-box"></div>
-                <div class="service-box"></div>
-                <div class="service-box"></div>
-                <div class="service-box"></div>
-                <div class="service-box"></div>
-                <div class="service-box"></div>
+
+                <div class="service-box">
+                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="surgery">
+                    <div class="service-content">
+                        <h1>Surgery</h1>
+                    </div>
+                    
+                </div>
+
+                <div class="service-box">
+                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="denture">
+                    <div class="service-content">
+                        <h1>Fixed Partial Denture</h1>
+                    </div>
+                </div>
+
+                <div class="service-box">
+                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="crown">
+                    <div class="service-content">
+                        <h1>Crown</h1>
+                    </div>
+                </div>
+
+                <div class="service-box">
+                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="removable">
+                    <div class="service-content">
+                        <h1>Removable Partial Denture</h1>
+                    </div>
+                </div>
+
+                <div class="service-box">
+                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="complete">
+                    <div class="service-content">
+                        <h1>Complete Denture</h1>
+                    </div>
+                </div>
+
+                <div class="service-box" >
+                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="others">
+                    <div class="service-content">
+                        <h1>Others</h1>
+                    </div>
+                </div>
+
             </main>
             <div class="appointment">
-                <a href="Appointment Page.html">Make An Appointment</a>
+                <a href="{% url 'book_appointment' %}">Make An Appointment</a>
             </div>
+        </div>
+        </section>
+
+        <div id="popup" class="popup">
+            <span class="close-button" onclick="closePopup()">&times;</span>
+            <div class="popup-content">
+                </div>
         </div>
 
         <!--Contact Us and Direction Section-->
-
+        <section id="contact-section">
         <div id="contact-us" class="contact-container">
             <div class="section contact">
                 <h1>Contact Us</h1>
@@ -133,19 +194,17 @@
                 <div class="map-box"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d632.9316372442667!2d121.08011861464253!3d14.559136050577871!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c7d5e5d08d15%3A0x84e8221dd93025c5!2sAcerld%20Dental%20Care!5e1!3m2!1sen!2sph!4v1736094162870!5m2!1sen!2sph" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
             </div>
         </div>
+        <!--Reviews Section-->
 
-        <!--Accredited HMOs Section-->
-
-        <div class="hmo-container">
-            <h1>Accredited HMO's</h1>
-            <div class="hmo">
-                <div><img src="{% static '2.png' %}" alt="HMO 1"></div>
-                <div><img src="{% static '2.png' %}" alt="HMO 2"></div>
-                <div><img src="{% static '2.png' %}" alt="HMO 3"></div>
-            </div>
+        <div class="review-container">
+            <h1>What Our Patients Say</h1>
+            <div class="reviews">  </div>
+            <a href="#" class="leave-review-button">Leave a Review</a> </div>
         </div>
+        </section>
         
-        <script src="{% static 'script.js' %}"></script>
+        
+        <script src="{% static 'landing.js' %}"></script>
         
     </body>
 </html>
