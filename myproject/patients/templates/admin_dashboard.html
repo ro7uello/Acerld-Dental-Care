@@ -98,6 +98,7 @@
         
             <!-- Add Profit Form -->
             <form id="addProfitForm">
+                {% csrf_token %}
                 <label for="profitDate">Date:</label>
                 <input type="date" id="profitDate" name="profitDate" required>
         
@@ -110,9 +111,9 @@
             <!-- Summary Section -->
             <div class="summary">
                 <h3>Summary</h3>
-                <p><strong>Daily Profit:</strong> ₱<span id="dailyProfit">0.00</span></p>
-                <p><strong>Monthly Profit:</strong> ₱<span id="monthlyProfit">0.00</span></p>
-                <p><strong>Yearly Profit:</strong> ₱<span id="yearlyProfit">0.00</span></p>
+                <p><strong>Daily Profit:</strong> <span id="dailyProfit">0.00</span></p>
+                <p><strong>Monthly Profit:</strong> <span id="monthlyProfit">0.00</span></p>
+                <p><strong>Yearly Profit:</strong> <span id="yearlyProfit">0.00</span></p>
             </div>
         
             <!-- Profit Records Table -->
@@ -135,6 +136,8 @@
             <h2>Settings</h2>
             <p>Feature coming soon...</p>
         </section>
+
+        <script src="{% static 'admin_db.js' %}"></script>
     </div>
 </body>
 </html>

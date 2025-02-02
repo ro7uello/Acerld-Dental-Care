@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages 
 from django.utils import timezone
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 from .forms import UserRegistrationForm, AppointmentForm, UserLoginForm
 from .models import Appointment, Patient, PromotionalOffer, Profit
+import json
 
 def register(request):
     if request.method == 'POST':
@@ -66,39 +68,6 @@ def admin_dashboard(request):
     }
     return render(request, 'admin_dashboard.html', context)
 
-def log_profit(request):
-    if request.method == 'POST':
-        amount = request.POST['amount']
-        Profit.objects.create(amount=amount)
-        return redirect('admin_dashboard')
-
-def get_profit_data(request):
-    today = timezone.now().date()
-    start_of_week = today - timedelta(days=today.weekday())
-    start_of_year = today.replace(month=1, day=1)
-    
-    weekly_profits = Profit.objects.filter(date_logged__gte=start_of_week)
-    quarterly_profits = Profit.objects.filter(date_logged__year=today.year)
-    yearly_profits = Profit.objects.filter(date_logged__year=today.year)
-
-    weekly_data = [0] * 7
-    for profit in weekly_profits:
-        weekly_data[profit.date_logged.weekday()] += profit.amount
-
-    quarterly_data = [0] * 4
-    for profit in quarterly_profits:
-        quarter = (profit.date_logged.month - 1) // 3
-        quarterly_data[quarter] += profit.amount
-
-    yearly_data = sum(profit.amount for profit in yearly_profits)
-
-    data = {
-        'weekly': weekly_data,
-        'quarterly': quarterly_data,
-        'yearly': yearly_data,
-    }
-    return JsonResponse(data)
-
 def landing_page(request):
     promotional_offers = PromotionalOffer.objects.all()
     return render(request, 'landing_page.html', {'promotional_offers': promotional_offers})
@@ -142,3 +111,51 @@ def get_available_time_slots(request):
             return JsonResponse({'time_slots': time_slots})
     
     return JsonResponse({'time_slots': []})
+
+@csrf_exempt
+def add_profit(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        profit_date = data.get('profitDate')
+        profit_amount = data.get('profitAmount')
+        
+        # Convert naive datetime to aware datetime
+        profit_date = timezone.make_aware(timezone.datetime.strptime(profit_date, '%Y-%m-%d'))
+        
+        # Save to database
+        Profit.objects.create(amount=profit_amount, date_logged=profit_date)
+        
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'fail'}, status=400)
+
+def get_profit_data(request):
+    today = timezone.now().date()
+    start_of_month = today.replace(day=1)
+    start_of_year = today.replace(month=1, day=1)
+    
+    daily_profits = Profit.objects.filter(date_logged__date=today)
+    monthly_profits = Profit.objects.filter(date_logged__date__gte=start_of_month)
+    yearly_profits = Profit.objects.filter(date_logged__date__gte=start_of_year)
+
+    daily_data = sum(profit.amount for profit in daily_profits)
+    monthly_data = sum(profit.amount for profit in monthly_profits)
+    yearly_data = sum(profit.amount for profit in yearly_profits)
+
+    data = {
+        'daily': float(daily_data),
+        'monthly': float(monthly_data),
+        'yearly': float(yearly_data),
+    }
+    return JsonResponse(data)
+
+def get_profit_records(request):
+    profits = Profit.objects.all().order_by('-date_logged')
+    records = [
+        {
+            'id': profit.id,
+            'date': profit.date_logged.strftime('%Y-%m-%d'),
+            'amount': float(profit.amount),  # Ensure amount is a float
+        }
+        for profit in profits
+    ]
+    return JsonResponse({'records': records})
