@@ -55,3 +55,39 @@ function previewImage(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const reviewForm = document.getElementById('review-form');
+
+    reviewForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const reviewText = document.getElementById('review-text').value;
+
+        console.log('Submitting review:', reviewText);  // Debugging line
+
+        fetch('/add-review/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                review_text: reviewText
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data);  // Debugging line
+            if (data.status === 'success') {
+                alert('Review submitted successfully');
+                reviewForm.reset();
+            } else {
+                alert('Failed to submit review');
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting review:', error);
+        });
+    });
+});

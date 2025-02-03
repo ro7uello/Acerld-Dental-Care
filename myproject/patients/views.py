@@ -4,10 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages 
 from django.utils import timezone
+from django.utils.timezone import make_aware
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 from .forms import UserRegistrationForm, AppointmentForm, UserLoginForm
-from .models import Appointment, Patient, PromotionalOffer, Profit
+from .models import Appointment, Patient, PromotionalOffer, Profit, Review
 import json
 
 def register(request):
@@ -55,15 +56,19 @@ def admin_dashboard(request):
     total_appointments = Appointment.objects.count()
     registered_patients = Patient.objects.count()
     active_dentists = 15  # Assuming you have a way to count active dentists
-    messages = 45  # Assuming you have a way to count messages
+    total_reviews = Review.objects.count()
 
     appointments = Appointment.objects.all()
+
+    today = timezone.localtime(timezone.now()).date()
+    todays_reviews = Review.objects.filter(created_at__date=today)
 
     context = {
         'total_appointments': total_appointments,
         'registered_patients': registered_patients,
         'active_dentists': active_dentists,
-        'messages': messages,
+        'total_reviews': total_reviews,
+        'todays_reviews': todays_reviews,
         'appointments': appointments,
     }
     return render(request, 'admin_dashboard.html', context)
@@ -118,18 +123,18 @@ def add_profit(request):
         data = json.loads(request.body)
         profit_date = data.get('profitDate')
         profit_amount = data.get('profitAmount')
-        
-        # Convert naive datetime to aware datetime
-        profit_date = timezone.make_aware(timezone.datetime.strptime(profit_date, '%Y-%m-%d'))
-        
+
+        # Convert naive datetime to aware datetime in the local timezone, then convert to UTC
+        profit_date = timezone.make_aware(datetime.strptime(profit_date, '%Y-%m-%d'), timezone.get_current_timezone())
+
         # Save to database
         Profit.objects.create(amount=profit_amount, date_logged=profit_date)
-        
+
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'fail'}, status=400)
 
 def get_profit_data(request):
-    today = timezone.now().date()
+    today = timezone.localtime(timezone.now()).date()
     start_of_month = today.replace(day=1)
     start_of_year = today.replace(month=1, day=1)
     
@@ -153,9 +158,24 @@ def get_profit_records(request):
     records = [
         {
             'id': profit.id,
-            'date': profit.date_logged.strftime('%Y-%m-%d'),
+            'date': timezone.localtime(profit.date_logged).strftime('%Y-%m-%d'),
             'amount': float(profit.amount),  # Ensure amount is a float
         }
         for profit in profits
     ]
     return JsonResponse({'records': records})
+
+@csrf_exempt
+def add_review(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        review_text = data.get('review_text')
+        user = request.user
+
+        print('Received review:', review_text)  # Debugging line
+
+        # Save to database
+        Review.objects.create(user=user, review_text=review_text)
+        
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'fail'}, status=400)

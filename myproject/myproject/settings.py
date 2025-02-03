@@ -106,12 +106,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
+USE_I18N = True  # Keep this for internationalization support
+USE_L10N = True  # For localization (formatting of dates, numbers, etc.)
+USE_TZ = True    # Enable timezone support
+TIME_ZONE = 'Asia/Manila'  # Set the correct timezone for your application
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

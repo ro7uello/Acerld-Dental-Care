@@ -6,8 +6,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const profitsTableBody = document.querySelector('#profitsTable tbody');
     const profitDateInput = document.getElementById('profitDate');
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' }); // 'YYYY-MM-DD' format
     profitDateInput.value = today;
+
+    function convertToLocalTime(dateString) {
+        const utcDate = new Date(dateString);
+        return utcDate.toLocaleString('en-PH', {
+            timeZone: 'Asia/Manila',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+    }
 
     function loadProfitData() {
         fetch('/api/profit-data/')
@@ -28,9 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Profit Records:', data);  // Debugging line
                 profitsTableBody.innerHTML = '';
                 data.records.forEach(record => {
+                    const localDate = convertToLocalTime(record.date);
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                        <td>${record.date}</td>
+                        <td>${localDate}</td>
                         <td>₱${Number(record.amount).toFixed(2)}</td>
                         <td><button class="delete-btn" data-id="${record.id}">Delete</button></td>
                     `;

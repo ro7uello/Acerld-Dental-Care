@@ -32,8 +32,8 @@
                     <p>15</p>
                 </div>
                 <div class="card">
-                    <h3>Messages</h3>
-                    <p>45</p>
+                    <h3>Reviews</h3>
+                    <p>{{ total_reviews }}</p>
                 </div>
             </div>
         </section>
@@ -55,14 +55,6 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>John Doe</td>
-                        <td>2025-01-10 10:00 AM</td>
-                        <td>Removable Partial Denture</td>
-                        <td>Bilateral</td>
-                        <td>Acrylic</td>
-                        <td>Confirmed</td>
-                        <td><button class="action-btn">Edit</button> <button class="action-btn">Delete</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -101,7 +93,6 @@
                 {% csrf_token %}
                 <label for="profitDate">Date:</label>
                 <input type="date" id="profitDate" name="profitDate" required>
-        
                 <label for="profitAmount">Profit Amount:</label>
                 <input type="number" id="profitAmount" name="profitAmount" step="0.01" required>
         
@@ -128,6 +119,32 @@
                 </thead>
                 <tbody>
                     <!-- Profit records will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="daily-reviews" class="section">
+            <h2>Today's Reviews</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Review</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for review in todays_reviews %}
+                    <tr>
+                        <td>{{ review.user.username }}</td>
+                        <td>{{ review.review_text }}</td>
+                        <td>{{ review.created_at }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No reviews for today.</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>

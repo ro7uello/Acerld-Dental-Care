@@ -8,10 +8,8 @@
     <link rel="stylesheet" href="{% static 'register.css' %}">
 </head>
 <body>
-    <header>
-        <h1>Register</h1>
-    </header>
     <div class="container">
+        <h1>Register</h1>
         <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
             {% if messages %}

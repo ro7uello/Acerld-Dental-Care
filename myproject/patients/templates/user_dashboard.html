@@ -15,7 +15,7 @@
     <header class="header">
         <nav class="navbar">
             <a href="LandingPage.html" class="logo-link">
-                <img class="tooth" src="{% static 'pictures/toothicon.png' %}" alt="Dental Clinic Logo">
+                <img class="tooth" src="{% static 'toothicon.png' %}" alt="Dental Clinic Logo">
             </a>
             <div class="nav-items">
                 <a href="#home-section" class="nav-link">Home</a>
@@ -65,7 +65,7 @@
                 <input type="text" id="last-name" value="{{ user.last_name }}" disabled>
     
                 <label><strong>Contact Number:</strong></label>
-                <input type="text" id="contact-number" value="{{ user.contact_number }}" disabled>
+                <input type="text" id="phone_number" value="{{ user.phone_number }}" disabled>
     
                 <label><strong>Email:</strong></label>
                 <input type="email" id="email" value="{{ user.email }}" disabled>
@@ -82,6 +82,7 @@
     <section id="contact-section">
     <div id="reviews" class="section-content">
         <form id="review-form">
+            {% csrf_token %}
             <h2>Leave a Review</h2>
             <label for="review-text">Your Review:</label>
             <textarea id="review-text" name="review_text" rows="4" required></textarea>

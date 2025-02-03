@@ -1,19 +1,31 @@
 body {
     font-family: Arial, sans-serif;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 20px;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
 .container {
-    width: 50%;
-    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 500px; /* Adjusted width */
+    max-width: 90%; /* Ensure it fits well on smaller screens */
+    text-align: center;
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.container h1 {
+    margin-bottom: 20px;
 }
 
 .form-group {
     margin-bottom: 15px;
+    text-align: left; /* Align labels and inputs to the left */
 }
 
 label {
@@ -22,22 +34,46 @@ label {
 }
 
 input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+    width: calc(100% - 20px); /* Ensure input width matches container padding */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding and border in element's total width */
 }
 
 button {
     width: 100%;
     padding: 10px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #28a745;
+    color: #fff;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease; /* Add transition for smooth hover effect */
 }
 
 button:hover {
     background-color: #45a049;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Add focus style for accessibility */
+}
+
+.login-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
 }
 
 .messages {

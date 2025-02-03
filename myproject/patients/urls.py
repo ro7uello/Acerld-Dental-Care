@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='landing_page'), name='logout'),
     path('dashboard/', redirect_to_dashboard, name='redirect_to_dashboard'),
     path('user_dashboard/', user_dashboard, name='user_dashboard'),
+    path('add-review/', views.add_review, name='add_review'),
     path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
     path('add-profit/', views.add_profit, name='add_profit'),
     path('api/profit-data/', views.get_profit_data, name='get_profit_data'),

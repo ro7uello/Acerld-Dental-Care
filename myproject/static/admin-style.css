@@ -191,3 +191,23 @@ table th {
     border: 1px solid #ddd;
     border-radius: 8px;
 }
+
+#daily-reviews {
+    margin-top: 40px;
+}
+
+#daily-reviews table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#daily-reviews th, #daily-reviews td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+#daily-reviews th {
+    background-color: #f4f4f9;
+}
