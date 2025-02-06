@@ -1,0 +1,521 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Alumni Sans Pinstripe", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #F3F3F3;
+}
+
+/* Header Section */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #3C3C3C;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    padding: 0 20px; 
+    width: 100%; 
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar .nav-items {
+    display: flex; 
+}
+
+.navbar .nav-link {  
+    font-size: 30px;
+    font-weight: 400;
+    color: #d9d9d9;
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: color 0.3s, text-shadow 0.3s; 
+}
+
+.navbar .tooth {
+    width: 50px;
+    height: auto;
+}
+
+.navbar .nav-link:hover {
+    color: white;
+    text-shadow: 0 0 5px white;
+}
+
+.login {
+    color: #d9d9d9;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: color 0.3s, text-shadow 0.3s;
+    font-size: 20px;
+}
+
+.login:hover {
+    color: white;
+    text-shadow: 0 0 5px white;
+}
+
+/* Slideshow Section */
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto; /* Removed gap from header */
+    overflow: hidden;
+    height: 800px;
+    object-fit: cover;
+}
+
+.slides {
+    display: none;
+    width: 100%;
+}
+
+.slideshow-container img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.dots-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #717171;
+}
+/* Description Section */
+.description-container {
+    position: relative;
+    max-width: 100%;
+    margin-top: 70px;
+    text-align: center;
+    color: #131313;
+}
+
+.title {
+    padding: 30px;
+    font-size: 30px;
+}
+
+.description {
+    font-size: 35px;
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 70px;
+    line-height: 1.6;
+}
+
+/* Skilled Dentists Section */
+.dentist {
+    pointer-events: none;
+}
+
+.dentist:hover {
+  cursor: pointer;
+}
+.dentist-header-container {
+    position: relative;
+    max-width: 100%;
+    margin-top: 50px;
+    text-align: center;
+    color: #131313;
+}
+
+.dentist-header {
+    font-size: 30px;
+    padding: 30px;
+}
+
+.dentist-description {
+    font-size: 35px;
+    width: 70%;
+    margin: 0 auto;
+    padding-bottom: 70px;
+    line-height: 1.6;
+}
+
+.dentist-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    text-align: center;
+}
+
+.dentist img {
+    width: 40%;
+    border-radius: 8px;
+    pointer-events: auto;
+}
+
+.dentist-pos {
+    font-size: 23px;
+}
+
+.dentist-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    max-width: 1000px;
+}
+
+.dentist-popup.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.dentist-popup .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 50%;
+    background-color: #ddd;
+}
+
+.dentist-popup .close-button:hover {
+    background-color: #ccc;
+}
+
+.dentist-popup-content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.dentist-popup-content img {
+    width: 150px;
+    height: 250px;
+    object-fit: cover;
+    margin: 0; 
+    flex-shrink: 0;
+}
+
+.dentist-popup-content .dentist-description {
+    text-align: left;
+    font-size: 20px;
+    line-height: 2.0;
+    flex-grow: 1; 
+    overflow-y: auto; 
+    max-height: 500px;
+    font-weight: bold;
+}
+
+
+/* Services Section */
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 50px;
+    margin-top: 70px;
+    background-color: #3C3C3C;
+}
+
+.container h1 {
+    text-align: center;
+    color: #F3F3F3;
+    font-size: 30px;
+}
+
+.services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10%;
+    padding: 35px;
+    border-radius: 10px;
+    justify-items: center;
+}
+
+.service-box {
+    width: 60%;
+    aspect-ratio: 1;
+    background-color: #F3F3F3;
+    border-radius: 5px;
+    cursor: pointer;
+    align-items: center;
+	position: relative;
+    overflow: hidden;
+}
+.service-image{
+    width: 100%;
+    object-fit: cover;
+	transition: transform 0.3s ease-in-out;
+    
+}
+
+.service-image:hover {
+    transform: scale(1.1);
+}
+
+.service-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+	pointer-events: none; 
+}
+
+.service-content h1{
+    margin: 0;
+    padding: 0;
+}
+
+.service-box:hover .service-content {
+    opacity: 1;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 50px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.popup.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.popup-content {
+    font-size: 35px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 50%;
+    background-color: #ddd;
+}
+
+.close-button:hover {
+    background-color: #ccc;
+}
+.popup table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.popup th, .popup td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.popup th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.popup td:nth-child(2) {
+    padding-left: 20px;
+}
+
+/* Appointment button */
+.appointment {
+    text-align: center;
+    padding-top: 40px;
+    margin: 20px 0;
+}
+
+.appointment a {
+    padding: 20px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: #fff;
+    cursor: pointer;
+    font-size: 25px;
+    text-decoration: none;
+}
+
+.appointment a:hover {
+    background-color: #777;
+}
+
+/* Contact Us and Direction Section */
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px;
+    background-color: #F3F3F3;
+    box-sizing: border-box;
+}
+
+.section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.section h1 {
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.contacts a {
+    text-decoration: none;
+    color: #717171;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease, text-shadow 0.3s ease; 
+}
+
+.contacts a:hover {
+    color: #000;
+    text-shadow: 0 0 10px #d9d9d9, 0 0 20px #d9d9d9, 0 0 30px #d9d9d9;
+}
+
+.map-box {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    background-color: #717171;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Review Section */
+.review-container {
+    max-width: 100%;
+    padding: 50px;
+    text-align: center;
+    background-color: #3C3C3C;
+    margin-top: 50px;
+}
+
+.review-container h1 {
+    font-size: 45px;
+    color:#d9d9d9;
+    margin-bottom: 30px;
+}
+
+.reviews {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+}
+
+.review-box {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.review-box p {
+    font-size: 18px;
+    color: #333;
+}
+
+.review-box .reviewer {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #555;
+}
+
+.leave-review-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #555;
+    color: #f9f9f9;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 25px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.leave-review-button:hover {
+    background-color: #d9d9d9;
+}

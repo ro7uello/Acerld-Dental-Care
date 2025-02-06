@@ -1,13 +1,15 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Appointment
+from .models import Appointment, Patient
 from datetime import datetime, time, timedelta
 from django.core.exceptions import ValidationError
 import re
-class UserRegistrationForm(UserCreationForm):
+
+class RegistrationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, help_text='Required')
     last_name = forms.CharField(max_length=30, required=True, help_text='Required')
+    email = forms.EmailField(required=True)
     phone_number = forms.CharField(max_length=15, required=True, help_text='Required')
     city_address = forms.CharField(max_length=100, required=True, help_text='Required')
 
@@ -33,93 +35,70 @@ class UserRegistrationForm(UserCreationForm):
     
     def clean(self):
         cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
+        password = cleaned_data.get("password1")
+        confirm_password = cleaned_data.get("password2")
 
         if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match") 
+            raise forms.ValidationError("Passwords do not match")
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+            Patient.objects.create(user=user, phone_number=self.cleaned_data['phone_number'], city_address=self.cleaned_data['city_address'])
+        return user
         
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(max_length=254, required=True)
     password = forms.CharField(widget=forms.PasswordInput, required=True)
+
+class ProfileCreationForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['phone_number', 'city_address']
         
 class AppointmentForm(forms.ModelForm):
-    DOCTOR_CHOICES = [
-        ('Dr. Smith', 'Dr. Smith'),
-        ('Dr. Johnson', 'Dr. Johnson'),
-        ('Dr. Williams', 'Dr. Williams'),
-    ]
-    
-    doctor = forms.ChoiceField(choices=DOCTOR_CHOICES)
-    # Remove the default time field as we'll use our custom time_slot field
     time_slot = forms.ChoiceField(choices=[], label="Available Time Slots")
     
     class Meta:
         model = Appointment
-        fields = ['date', 'doctor', 'service', 'notes']
+        fields = ['date', 'time_slot', 'service', 'notes']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'service': forms.Select(choices=[
-                ('Consultation', 'Consultation'),
-                ('Check-Up', 'Check-Up'),
-                ('Follow-Up', 'Follow-Up')
+                ('Surgery', 'Surgery'),
+                ('Fixed Partial Denture', 'Fixed Partial Denture'),
+                ('Crown', 'Crown'),
+                ('Removable Partial Denture', 'Removable Partial Denture'),
+                ('Complete Denture', 'Complete Denture'),
+                ('Others', 'Others')
             ]),
             'notes': forms.Textarea(attrs={'placeholder': 'Any specific details...'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Initialize time slots
+        self.fields['time_slot'].choices = [
+            (f"{hour}:00", f"{hour}:00") for hour in range(9, 18)
+        ]
+
+    def get_available_time_slots(self, selected_date):
+        # Generate all possible time slots with 1-hour intervals
+        time_slots = [
+            ("09:00", "09:00"),
+            ("10:00", "10:00"),
+            ("11:00", "11:00"),
+            ("12:00", "12:00"),
+            ("13:00", "13:00"),
+            ("14:00", "14:00"),
+            ("15:00", "15:00"),
+            ("16:00", "16:00"),
+            ("17:00", "17:00")
+        ]
         
-        # Get the date from POST data if it exists
-        if 'data' in kwargs and kwargs['data'].get('date'):
-            selected_date = kwargs['data'].get('date')
-            selected_doctor = kwargs['data'].get('doctor')
-            self.fields['time_slot'].choices = self.get_available_time_slots(selected_date, selected_doctor)
-        else:
-            self.fields['time_slot'].choices = []
-
-    def get_available_time_slots(self, selected_date, selected_doctor):
-        # Generate all possible time slots
-        time_slots = []
-        start_time = time(9, 0)  # 9 AM
-        end_time = time(17, 0)   # 5 PM
+        # Filter out the time slots that are already taken
+        taken_slots = Appointment.objects.filter(date=selected_date).values_list('time', flat=True)
+        available_slots = [slot for slot in time_slots if slot[0] not in taken_slots]
         
-        # Get all booked appointments for the selected date and doctor
-        booked_times = Appointment.objects.filter(
-            date=selected_date,
-            doctor=selected_doctor
-        ).values_list('time', flat=True)
-
-        # Convert booked_times to a list of time objects
-        booked_slots = [t for t in booked_times]
-
-        # Generate available time slots
-        current_time = start_time
-        while current_time <= end_time:
-            if current_time not in booked_slots:
-                time_str = current_time.strftime('%H:%M')
-                time_slots.append((time_str, time_str))
-            current_time = (datetime.combine(datetime.min, current_time) + timedelta(hours=1)).time()
-
-        return time_slots
-
-    def clean(self):
-        cleaned_data = super().clean()
-        date = cleaned_data.get('date')
-        time_slot = cleaned_data.get('time_slot')
-        doctor = cleaned_data.get('doctor')
-
-        if date and time_slot and doctor:
-            # Convert time_slot string to time object
-            hour, minute = map(int, time_slot.split(':'))
-            appointment_time = time(hour, minute)
-
-            # Check if the appointment already exists
-            if Appointment.objects.filter(
-                date=date,
-                time=appointment_time,
-                doctor=doctor
-            ).exists():
-                raise forms.ValidationError('This time slot is already booked.')
-
-        return cleaned_data
+        return available_slots

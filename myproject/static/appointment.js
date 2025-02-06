@@ -3,14 +3,6 @@ const successMessage = document.getElementById('successMessage');
 const otherOptions = document.getElementById('otherOptions');
 const materialOptions = document.getElementById('materialOptions');
 
-appointmentForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    successMessage.style.display = 'block';
-    appointmentForm.reset();
-    updateOptions();
-    materialOptions.style.display = 'none'; // Hide material options on form reset
-});
-
 function updateOptions() {
     const serviceSelect = document.getElementById('service');
     const otherTypeSelect = document.getElementById('otherType');
@@ -27,22 +19,22 @@ function updateOptions() {
     let options = [];
 
     switch (selectedService) {
-        case 'other':
-            options = ["Consultation", "Cleaning", "Flouride Varnish Application", "Composite Restoration (per surface)", "Extraction", "Xray/Pano/Cbct Scan", "Teeth Whitening", "Orthodontic Appliance (Braces)", "Root Canal Therapy", "Post And Core", "Bite Analysis"];
+        case 'Others':
+            options = ["Consultation", "Cleaning", "Fluoride Varnish Application", "Composite Restoration (per surface)", "Extraction", "Xray/Pano/Cbct Scan", "Teeth Whitening", "Orthodontic Appliance (Braces)", "Root Canal Therapy", "Post And Core", "Bite Analysis"];
             break;
-        case 'surgery':
+        case 'Surgery':
             options = ["Dental Implant without a crown", "Impacted Tooth Removal", "Perio Surgery", "Gingival Contouring"];
             break;
-        case 'fixed':
+        case 'Fixed Partial Denture':
             options = ["Direct Composite", "Indirect Composite", "E-max", "Zirconia"];
             break;
-        case 'crown':
+        case 'Crown':
             options = ["Porcelain fused to metal", "Pure ceramic crown"];
             break;
-        case 'removable':
+        case 'Removable Partial Denture':
             options = ["Unilateral", "Bilateral"];
             break;
-        case 'complete':
+        case 'Complete Denture':
             options = ["Acrylic", "Thermosens/Ivocap", "Biofunctional Prosthetic System"];
             break;
         default:

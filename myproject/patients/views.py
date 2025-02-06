@@ -1,27 +1,45 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages 
 from django.utils import timezone
 from django.utils.timezone import make_aware
+from django.urls import reverse
 from django.http import JsonResponse
 from datetime import datetime, timedelta
-from .forms import UserRegistrationForm, AppointmentForm, UserLoginForm
+from .forms import RegistrationForm, AppointmentForm, ProfileCreationForm, UserLoginForm
 from .models import Appointment, Patient, PromotionalOffer, Profit, Review
+from django.contrib.auth.models import User
 import json
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, 'Account created successfully! Please log in.')
+            username = form.cleaned_data['username']
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            phone_number = form.cleaned_data['phone_number']
+            city_address = form.cleaned_data['city_address']
+
+            # Check if email already exists
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email address already exists.')
+                return render(request, 'register.html', {'form': form})
+
+            # Create user and patient
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+            Patient.objects.create(user=user, phone_number=phone_number, city_address=city_address, email=email)
+            messages.success(request, 'Account created successfully!')
             return redirect('login')
-        else:
-            messages.error(request, 'Please correct the errors below.')
     else:
-        form = UserRegistrationForm()
+        form = RegistrationForm()
     return render(request, 'register.html', {'form': form})
 
 def user_login(request):
@@ -58,7 +76,7 @@ def admin_dashboard(request):
     active_dentists = 15  # Assuming you have a way to count active dentists
     total_reviews = Review.objects.count()
 
-    appointments = Appointment.objects.all()
+    appointments = Appointment.objects.all().order_by('date', 'time')
 
     today = timezone.localtime(timezone.now()).date()
     todays_reviews = Review.objects.filter(created_at__date=today)
@@ -73,36 +91,86 @@ def admin_dashboard(request):
     }
     return render(request, 'admin_dashboard.html', context)
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('user_dashboard')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    return render(request, 'login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('landing_page')
+
 def landing_page(request):
     promotional_offers = PromotionalOffer.objects.all()
-    return render(request, 'landing_page.html', {'promotional_offers': promotional_offers})
+    return render(request, 'landing_page.html', {
+        'promotional_offers': promotional_offers
+    })
 
 @login_required
 def book_appointment(request):
-    if request.method == 'POST':
-        form = AppointmentForm(data=request.POST)
-        if form.is_valid():
-            try:
-                appointment = form.save(commit=False)
-                appointment.user = request.user
-                # Convert time_slot string to time object
-                hour, minute = map(int, form.cleaned_data['time_slot'].split(':'))
-                appointment.time = datetime.strptime(f"{hour}:{minute}", "%H:%M").time()
-                appointment.save()
-                messages.success(request, 'Appointment booked successfully!')
-                return redirect('user_dashboard')
-            except Exception as e:
-                messages.error(request, f'Error saving appointment: {str(e)}')
-    else:
-        form = AppointmentForm()
+    hours = ["09", "10", "11", "12", "13", "14", "15", "16", "17"]
     
-    return render(request, 'book_appointment.html', {'form': form})
+    if request.method == 'POST':
+        date = request.POST.get('date')
+        time_str = request.POST.get('time_slot')
+        service = request.POST.get('service')
+        other_type = request.POST.get('otherType')
+        material_type = request.POST.get('materialType')
+        notes = request.POST.get('notes')
 
-@login_required
+        # Convert time string to time object
+        time_obj = datetime.strptime(time_str, '%H:%M').time()
+
+        # Create service description
+        service_description = service
+        if other_type:
+            service_description += f" - {other_type}"
+        if material_type:
+            service_description += f" ({material_type})"
+
+        # Check if time slot is available
+        if Appointment.objects.filter(date=date, time=time_obj).exists():
+            messages.error(request, 'This time slot is already taken. Please choose another time.')
+            return render(request, 'book_appointment.html', {'hours': hours})
+
+        # Create and save appointment
+        appointment = Appointment(
+            user=request.user,
+            date=date,
+            time=time_obj,
+            service=service_description,
+            notes=notes
+        )
+        appointment.save()
+        
+        messages.success(request, 'Appointment booked successfully!')
+        return redirect('user_dashboard')
+    
+    return render(request, 'book_appointment.html', {'hours': hours})
+
 def user_dashboard(request):
-    # Get all appointments for the current user
-    appointments = Appointment.objects.filter(user=request.user).order_by('date', 'time')
-    return render(request, 'user_dashboard.html', {'appointments': appointments})
+    try:
+        patient = Patient.objects.get(user=request.user)
+    except Patient.DoesNotExist:
+        patient = Patient.objects.create(
+            user=request.user,
+            phone_number='',
+            city_address=''
+        )
+    
+    appointments = Appointment.objects.filter(user=request.user)
+    context = {
+        'appointments': appointments,
+        'patient': patient  # Make sure this is passed to the template
+    }
+    return render(request, 'user_dashboard.html', context)
 
 @login_required
 def get_available_time_slots(request):

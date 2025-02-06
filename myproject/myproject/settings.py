@@ -116,7 +116,11 @@ TIME_ZONE = 'Asia/Manila'  # Set the correct timezone for your application
 
 import os
 
-# Static files (CSS, JavaScript, Images)
+# Media files settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Static files settings
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
@@ -125,8 +129,12 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media files (uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+LOGIN_REDIRECT_URL = 'user_dashboard'
+LOGIN_URL = 'login'
 
-LOGIN_REDIRECT_URL = 'redirect_to_dashboard'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',  # or 'django.db.backends.postgresql', 'django.db.backends.mysql', etc.
+        'NAME': BASE_DIR / 'db.sqlite3',  # or the path to your database file
+    }
+}
