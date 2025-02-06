@@ -77,6 +77,7 @@ body {
     overflow: hidden;
     height: 800px;
     object-fit: cover;
+    margin-bottom: 5vh;
 }
 
 .slides {
@@ -111,7 +112,7 @@ body {
 .description-container {
     position: relative;
     max-width: 100%;
-    margin-top: 70px;
+    margin-top: 10px;
     text-align: center;
     color: #131313;
 }
@@ -132,6 +133,8 @@ body {
 /* Skilled Dentists Section */
 .dentist {
     pointer-events: none;
+    text-align: center;
+    margin-bottom: 150px;
 }
 
 .dentist:hover {
@@ -159,14 +162,14 @@ body {
 }
 
 .dentist-container {
-    display: flex;
-    justify-content: space-between;
-    max-width: 100%;
-    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 10px;
+    justify-content: center;
 }
 
 .dentist img {
-    width: 40%;
+    width: 60%;
     border-radius: 8px;
     pointer-events: auto;
 }
@@ -225,7 +228,7 @@ body {
 
 .dentist-popup-content img {
     width: 150px;
-    height: 250px;
+    height: 150px;
     object-fit: cover;
     margin: 0; 
     flex-shrink: 0;
@@ -247,33 +250,39 @@ body {
     width: 100%;
     max-width: 100%;
     padding: 50px;
-    margin-top: 70px;
+    margin-top: 100px;
     background-color: #3C3C3C;
 }
 
 .container h1 {
     text-align: center;
     color: #F3F3F3;
-    font-size: 30px;
+    font-size: 35px;
 }
 
 .services {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10%;
-    padding: 35px;
-    border-radius: 10px;
-    justify-items: center;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2, auto);
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: max-content; 
+    margin: 0 auto;
 }
 
 .service-box {
-    width: 60%;
+    width: 100%;
+    max-width: 300px;
     aspect-ratio: 1;
     background-color: #F3F3F3;
     border-radius: 5px;
     cursor: pointer;
+    display: flex; 
+    justify-content: center;
     align-items: center;
-	position: relative;
+    position: relative;
     overflow: hidden;
 }
 .service-image{
@@ -289,8 +298,9 @@ body {
 
 .service-content {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
     display: flex;
@@ -302,7 +312,7 @@ body {
     background: rgba(0, 0, 0, 0.5);
     opacity: 0;
     transition: opacity 0.5s ease;
-	pointer-events: none; 
+    pointer-events: none;
 }
 
 .service-content h1{
@@ -325,7 +335,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    opacity: 0; /* Initially hidden */
+    opacity: 0; 
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
@@ -518,4 +528,4 @@ body {
 
 .leave-review-button:hover {
     background-color: #d9d9d9;
-}   
+}

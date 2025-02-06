@@ -28,11 +28,29 @@
         </nav>
     </header>
     <section id="home-section">
-        <div id="home" class="section-content"> 
-        <h1>Welcome, {{ request.user.username }}</h1>
-        <p>Here you can manage your appointments and profile.</p>
-    </div>
+        <div id="home" class="slideshow-container">
+            <div class="slides">
+                <img src="D:/Acerld/pictures/Acerld Dental Care.png" alt="slide1">
+            </div>
+            <div class="slides">
+                <img src="D:/Acerld/pictures/valentines.png" alt="slide2">
+            </div>
+            <div class="slides">
+                <img src="D:/Acerld/pictures/slide1.png" alt="slide3">
+            </div>
+        </div>
+        <div class="dots-container">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
     </section>
+
+    <div class="title-container">
+        <div class="title">
+            <h1>Acerld Dental Care</h1>
+        </div>
+    </div>
 
 
     <section id="appointment-section">

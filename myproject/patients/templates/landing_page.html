@@ -65,7 +65,7 @@
             <div class="dots-container">
                 {% if promotional_offers %}
                     {% for offer in promotional_offers %}
-                    <span class="dot" onclick="currentSlide({{ forloop.counter }})"></span>
+                    <span class="dot" onclick="currentSlide('{{ forloop.counter }}')"></span>
                     {% endfor %}
                 {% else %}
                     <span class="dot" onclick="currentSlide(1)"></span>
@@ -102,29 +102,38 @@
         </div>
         <div class="dentist-container">
             <div class="dentist" data-dentist="dr_peter">
-                <img src="{% static 'Sample.jpg' %}" alt="dentist1">
+                <img src="{% static 'Dr.Peter Lou Santiago-Caronan Owner.png' %}" alt="dentist1">
                 <div class="dentist-name">
                     <h1>Dr. Peter Lou Santiago-Caronan</h1>
                 </div>
                 <div class="dentist-pos">
-                    <p>Head Dentist</p> 
+                    <p>Owner</p> 
                 </div>
             </div>
-            <div class="dentist" data-dentist="dr_brian">
-                <img src="{% static 'Sample.jpg' %}" alt="dentist2">
+            <div class="dentist">
+                <img src="{% static 'Claress.png' %}" alt="dentist2">
                 <div class="dentist-name">
-                    <h1>Dr. Brian S. Bongolan</h1>
+                    <h1>Claress Joy R. Apone</h1>
                 </div>
                 <div class="dentist-pos">
-                    <p>Pediatric Dentistry</p></div>
+                    <p>Dental Assistant</p></div>
             </div>
-            <div class="dentist" data-dentist="dr_chloie">
-                <img src="{% static 'Sample.jpg' %}" alt="dentist3">
+            <div class="dentist">
+                <img src="{% static 'Justine.png' %}" alt="dentist3">
                 <div class="dentist-name">
-                    <h1>Dr. Chloie Jeremy R. Tuason</h1>
+                    <h1>Justine Mae L. Villareal</h1>
                 </div>
                 <div class="dentist-pos">
-                    <p>General Dentist</p>
+                    <p>Dental Assistant (Reliever)</p>
+                </div>
+            </div>
+            <div class="dentist">
+                <img src="{% static 'Josephine.png' %}" alt="dentist4">
+                <div class="dentist-name">
+                    <h1>Josephine N. Varona Sr.</h1>
+                </div>
+                <div class="dentist-pos">
+                    <p>Dental Assistant</p>
                 </div>
             </div>
         </div>
@@ -133,7 +142,7 @@
         <div id="dentist-popup" class="dentist-popup">
             <span class="close-button" onclick="closeDentistPopup()">×</span>
             <div class="dentist-popup-content">
-                <img id="dentist-popup-image" src="" alt="Dentist Image">
+                <img id="dentist-popup-image" src="{% static 'Dr.Peter Lou Santiago-Caronan Owner.png' %}" alt="Dentist Image">
                 <div class="dentist-description" id="dentist-popup-text">
                     </div>
             </div>
@@ -147,7 +156,7 @@
             <main class="services">
 
                 <div class="service-box">
-                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="surgery">
+                    <img class="service-image" src="{% static '1.png' %}" data-service="surgery">
                     <div class="service-content">
                         <h1>Surgery</h1>
                     </div>
@@ -155,35 +164,35 @@
                 </div>
 
                 <div class="service-box">
-                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="denture">
+                    <img class="service-image" src="{% static '2.png' %}" data-service="denture">
                     <div class="service-content">
                         <h1>Fixed Partial Denture</h1>
                     </div>
                 </div>
 
                 <div class="service-box">
-                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="crown">
+                    <img class="service-image" src="{% static '3.png' %}" data-service="crown">
                     <div class="service-content">
                         <h1>Crown</h1>
                     </div>
                 </div>
 
                 <div class="service-box">
-                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="removable">
+                    <img class="service-image" src="{% static '4.png' %}" data-service="removable">
                     <div class="service-content">
                         <h1>Removable Partial Denture</h1>
                     </div>
                 </div>
 
                 <div class="service-box">
-                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="complete">
+                    <img class="service-image" src="{% static '5.png' %}" data-service="complete">
                     <div class="service-content">
                         <h1>Complete Denture</h1>
                     </div>
                 </div>
 
                 <div class="service-box" >
-                    <img class="service-image" src="{% static 'Sample.jpg' %}" data-service="others">
+                    <img class="service-image" src="{% static '6.png' %}" data-service="others">
                     <div class="service-content">
                         <h1>Others</h1>
                     </div>
@@ -228,7 +237,12 @@
             <a href="#" class="leave-review-button">Leave a Review</a> </div>
         </div>
         </section>
-        
+
+        <script>
+            const dentistImages = {
+                dr_peter: "{% static 'Dr.Peter Lou Santiago-Caronan Owner.png' %}"
+            };
+        </script>
         
         <script src="{% static 'landing.js' %}"></script>
         

@@ -268,3 +268,51 @@ li {
 #review-form button:hover {
     background-color: #131313;
 }
+
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto; /* Removed gap from header */
+    overflow: hidden;
+    height: 800px;
+    object-fit: cover;
+}
+.slides {
+    display: none;
+    width: 100%;
+}
+.slideshow-container img {
+    width: 100%;
+    border-radius: 8px;
+}
+.dots-container {
+    text-align: center;
+    margin-top: 10px;
+}
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+.active {
+    background-color: #717171;
+}
+
+.title-container {
+    position: relative;
+    max-width: 100%;
+    margin-top: 0px;
+    text-align: center;
+    color: #131313;
+}
+.title {
+    padding: 30px;
+    font-size: 30px;
+}
+#appointment-section {
+    margin-top: 10px;
+}
